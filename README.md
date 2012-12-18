@@ -30,7 +30,7 @@ for example:<br>
   5.5    : float(32bit) => 0x0000000240b000000 (Float(32bit) class, data = 5.5f)<br>
   [1,2,3]: Array in length 3 => 0xfffffffd12345678 ([-3, 0x12345678])<br>
                               -3 means Array length is 3, 0x12345678 is the address of the array:<br>
-                from 0x12345678, you may read like a int[]:<br>
+         using a memory tool to inspect from 0x12345678, you may read like an int[]:<br>
                 (int []){1, 1, 1, 2, 1, 3};<br>
 
   "abc" : String "abc" may like 0x8765432112345678:  <br>
