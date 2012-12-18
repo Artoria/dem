@@ -22,6 +22,8 @@ struct dem_stack{
   dem_node buf[];
 };
 
+
+extern "C"{
 dem_stack* dem_new(int size){
   if (size == -1) { size = 1024; } 
   dem_stack *x = (dem_stack*)malloc(sizeof(dem_stack) + sizeof(dem_node[size]));
@@ -64,7 +66,7 @@ int dem_push_object(dem_stack *d, void *klass, void *object){
   }
 }
 
-int dem_ary(dem_stack *d, dem_node *array, int len){
+int dem_push_ary(dem_stack *d, dem_node *array, int len){
   if (d->top + 1 < d -> size){
     d->buf[++d->top].klass = -len;
     d->buf[d->top].value   = (unsigned long)array;
@@ -97,6 +99,10 @@ int dem_pop(dem_stack *d, dem_node *out){
 typedef void (*dem_stack_function)(unsigned long object, dem_stack *stack);
 typedef dem_node (*dem_function)(unsigned long object);
 
+typedef void (__stdcall *dem_stack_function_stdcall)(unsigned long object, dem_stack *stack);
+typedef dem_node (__stdcall *dem_function_stdcall)(unsigned long object);
+
+
 void dem_call(dem_stack *d){
   dem_node object;
   dem_pop(d, &object);
@@ -112,7 +118,25 @@ void dem_call_stack(dem_stack *d){
   dd(object.object, d);
 }
 
+void dem_call_stdcall(dem_stack *d){
+  dem_node object;
+  dem_pop(d, &object);
+  dem_function_stdcall dd = (dem_function_stdcall)object.klass;
+  dem_node result = dd(object.object);
+  dem_push(d, result);
+}
 
+void dem_call_stack__stdcall(dem_stack *d){
+  dem_node object;
+  dem_pop(d, &object);
+  dem_stack_function_stdcall dd = (dem_stack_function_stdcall)object.klass;
+  dd(object.object, d);
+}
+
+
+}
+
+/*
 void add(unsigned long object, dem_stack *stack){
   dem_node a, b;
   dem_pop(stack, &a);
@@ -126,6 +150,7 @@ void print(unsigned long object, dem_stack *stack){
   printf("%d\n", a.int_value);
 }
 
+
 int main(){
   dem_stack *d = dem_new(1024);
   dem_push_int(d, 3);
@@ -136,3 +161,4 @@ int main(){
   dem_call_stack(d);
   dem_free(d);
 }
+*/
