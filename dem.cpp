@@ -126,7 +126,7 @@ void dem_call_stdcall(dem_stack *d){
   dem_push(d, result);
 }
 
-void dem_call_stack__stdcall(dem_stack *d){
+void dem_call_stack_stdcall(dem_stack *d){
   dem_node object;
   dem_pop(d, &object);
   dem_stack_function_stdcall dd = (dem_stack_function_stdcall)object.klass;
