@@ -1,5 +1,6 @@
 dem
 ===
+<pre>
 <br>
 RGSS Data Exchange Model<br>
 <br>
@@ -33,9 +34,11 @@ for example:<br>
                 (int []){1, 1, 1, 2, 1, 3};<br>
 
   "abc" : String "abc" may like 0x8765432112345678:  <br>
-      *) 0x87654321 is the address to a String class struct(like in ruby),<br>
+      *) 0x87654321 is the address to a String class struct(like in Ruby),<br>
       *) 0x12345678 is the address to "abc".<br>
 
 
 
   
+
+</pre>
