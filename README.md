@@ -17,7 +17,7 @@ We define dem_node like this:<br>
 Conventions:<br>
   *The class number of Integer = 1<br>
   *The class number of 32bit Float (aka IEEE single precision) = 2<br>
-  *The class number of Array < 0 <br>
+  *The class number of Array <= 0 <br>
   *Other class number < 65536 is a predefined class tag,<br>
   *Class number >= 65536 is a real address in 32bit. <br>
      Either a pointer to a struct to certain class, or a function.<br>
