@@ -9,11 +9,11 @@ struct dem_node{
     int int_value;
     float float_value;
   };
-};
+}dem_registered[256];
 
 enum {
-  CLASS_INT,
-  CLASS_FLOAT
+  CLASS_INT = 1,
+  CLASS_FLOAT = 2,
 };
 
 struct dem_stack{
@@ -32,8 +32,22 @@ dem_stack* dem_new(int size){
   return x;
 }
 
+
+
 void dem_free(dem_stack *x){
   free(x);
+}
+
+int dem_set(dem_stack *d, int where){
+  if (where < 0 && d->top + where >= 0){
+       d->top += where;
+       return 1;
+  }
+  if (where < d -> size){
+      d->top = where;
+      return 1;
+  }
+  return 0;
 }
 
 int dem_push_int(dem_stack *d, int k){
@@ -66,6 +80,7 @@ int dem_push_object(dem_stack *d, void *klass, void *object){
   }
 }
 
+
 int dem_push_ary(dem_stack *d, dem_node *array, int len){
   if (d->top + 1 < d -> size){
     d->buf[++d->top].klass = -len;
@@ -80,6 +95,16 @@ int dem_push_ary(dem_stack *d, dem_node *array, int len){
 int dem_push(dem_stack *d, dem_node node){
   if (d->top + 1 < d -> size){
     d->buf[++d->top] = node;
+    return 1;
+  }else{
+    return 0;
+  }
+}
+
+
+int dem_push_ptr(dem_stack *d, dem_node *node){
+  if (d->top + 1 < d -> size){
+    d->buf[++d->top] = *node;
     return 1;
   }else{
     return 0;
@@ -132,6 +157,19 @@ void dem_call_stack_stdcall(dem_stack *d){
   dem_stack_function_stdcall dd = (dem_stack_function_stdcall)object.klass;
   dd(object.object, d);
 }
+
+/*-----------------------------------------------------*/
+
+int dem_register_object(int index, long klass, long obj){
+  dem_node object = {klass, obj};
+  dem_registered[index] = object;
+  return 1;
+}
+
+int dem_push_register(dem_stack *d, int index){
+  return dem_push(d, dem_registered[index]);
+}
+
 
 
 }
